@@ -5,10 +5,10 @@ screenId=$(screen -ls | grep vim | grep -v Attached | cut -f 2 | tail -n 1)
 maxNumVims=5
 
 if [[ $screenId == "" ]]; then
-    echo "No more screen vim screen sessions left - this is bad. Load two instances and load vim normally:"
-    screen -S vim -d -m $VIMEXE
-    screen -S vim -d -m $VIMEXE
-    screen -S vim -d -m $VIMEXE
+    echo "No more screen vim screen sessions left - this is bad. Load $maxNumVim instances in the background and load vim normally:"
+    for i in $( seq 1 $maxNumVims ); do
+        screen -S vim -d -m $VIMEXE
+    done
     exec $VIMEXE $@
 else
     # cd the vim instance into the current directory
