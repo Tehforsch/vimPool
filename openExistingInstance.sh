@@ -1,10 +1,12 @@
 #!/bin/bash
 
 # List all screen sessions which are running vim and get the process id of the last one
-screenId=$(screen -ls | grep vim | cut -f 2 | tail -n 1)
+screenId=$(screen -ls | grep vim | grep -v Attached | cut -f 2 | tail -n 1)
+maxNumVims=5
 
 if [[ $screenId == "" ]]; then
     echo "No more screen vim screen sessions left - this is bad. Load two instances and load vim normally:"
+    screen -S vim -d -m $VIMEXE
     screen -S vim -d -m $VIMEXE
     screen -S vim -d -m $VIMEXE
     exec $VIMEXE $@
@@ -19,10 +21,12 @@ else
     # Open the files given in the arguments
     for file in "$@"; do
         screen -S $screenId -X stuff ":e $file"$(echo -ne '\015')
-        echo "$var"
     done
-    # Start a new instance to replace this one:
-    screen -S vim -d -m $VIMEXE
+    # If the number of running vim instances is below $maxNumVims we better replace this one
+    if [[ $(screen -ls | grep vim | wc -l) -lt $maxNumVims ]]; then
+        # Start a new instance to replace this one:
+        screen -S vim -d -m $VIMEXE
+    fi
     # Now we re-attach the session
     screen -r $screenId
 fi
