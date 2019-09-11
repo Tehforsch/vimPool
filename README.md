@@ -3,4 +3,4 @@ Solution: Have multiple screen instances with vim open in the background at all 
 
 To use:
 1. Set the environment variable VIMEXE to your preferred vim executable.
-2. Create an alias for the script openExistingVimInstance. This will attach to a running screen session with vim and replace it with a new instance. If no previous screen instance with vim exists it will open two new ones (so you always have a backup one in case you need to open two instances quickly after each other)
+2. Create an alias for the script openExistingVimInstance. This will attach to a running screen session with vim and replace it with a new instance. If no previous screen instance with vim exists it will open new ones (so you always have a backup one in case you need to open multiple instances quickly after each other)
